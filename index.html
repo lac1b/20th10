@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>💌 Thư Chúc Mừng 20/10 💐</title>
+    <style>
+      /* 🌸 Toàn trang */
+      body {
+        margin: 0;
+        height: 100vh;
+        background: linear-gradient(135deg, #fff0f6, #ffe6f0);
+        font-family: "Poppins", "Segoe UI", sans-serif;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+      }
+
+      /* 🌹 Nền hoa hồng bay */
+      .rose {
+        position: absolute;
+        opacity: 0.15;
+        font-size: 32px;
+        animation: floatRose 7s linear infinite;
+        user-select: none;
+        pointer-events: none;
+      }
+      @keyframes floatRose {
+        0% {
+          transform: translateY(-20vh) rotate(0deg);
+        }
+        100% {
+          transform: translateY(110vh) rotate(360deg);
+        }
+      }
+
+      /* ✉️ Phong bì */
+      .envelope {
+        position: relative;
+        width: 270px;
+        height: 190px;
+        background: #ff99bb;
+        border-radius: 6px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        transition: all 0.6s ease;
+        transform-style: preserve-3d;
+        cursor: pointer;
+        z-index: 5;
+      }
+      .envelope::before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(180deg, #ffb3cc, #ff99bb);
+        clip-path: polygon(0 0, 50% 60%, 100% 0, 100% 100%, 0 100%);
+        border-radius: 6px;
+        top: 0;
+        left: 0;
+        z-index: 2;
+        transform-origin: top;
+        transition: transform 0.8s ease;
+      }
+      .envelope.open::before {
+        transform: rotateX(180deg);
+      }
+
+      /* 💌 Nội dung thư */
+      .letter {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        right: 8px;
+        bottom: 8px;
+        background: white;
+        border-radius: 6px;
+        transform: translateY(60%);
+        opacity: 0;
+        transition: all 1s ease;
+        padding: 14px;
+        text-align: center;
+        overflow: hidden;
+      }
+      .envelope.open .letter {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      h2 {
+        font-size: 18px;
+        color: #c61b66;
+        margin: 4px 0;
+      }
+      p {
+        color: #444;
+        font-size: 14px;
+        line-height: 1.5;
+        margin: 6px 0;
+      }
+
+      /* 💝 Nút bấm */
+      button {
+        margin-top: 16px;
+        background: #ff4d88;
+        border: none;
+        color: white;
+        padding: 10px 18px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 15px;
+        box-shadow: 0 4px 12px rgba(255, 77, 136, 0.3);
+        transition: 0.3s;
+        z-index: 10;
+      }
+      button:hover {
+        background: #ff3377;
+      }
+
+      /* 🎉 Confetti */
+      #confetti {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 3;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 🌹 Hoa hồng nền -->
+    <div id="roses"></div>
+    <canvas id="confetti"></canvas>
+
+    <!-- ✉️ Phong bì -->
+    <div class="envelope" id="envelope">
+      <div class="letter">
+        <h2>🌸 Chúc mừng 20/10 🌸</h2>
+        <p>
+          Gửi đến mẹ người phụ nữ tuyệt vời của đời con Sẽ thật nhiều sức khoẻ
+          niềm vui hàng nghìn may mắn đến với mẹ Mong mẹ sẽ luôn giữ nụ cười
+          trên môi dẫu ngoài kia có bao nhiêu khó khăn. Con yêu Mẹ 💕
+        </p>
+      </div>
+    </div>
+
+    <!-- 💝 Nút mở thư -->
+    <button id="openBtn">📬 Mở thư</button>
+
+    <script>
+      /* 💌 Mở/Đóng thư */
+      const envelope = document.getElementById("envelope");
+      const openBtn = document.getElementById("openBtn");
+      let opened = false;
+      openBtn.addEventListener("click", () => {
+        if (!opened) {
+          envelope.classList.add("open");
+          openBtn.textContent = "💝 Đóng thư";
+          opened = true;
+          startConfetti();
+        } else {
+          envelope.classList.remove("open");
+          openBtn.textContent = "📬 Mở thư";
+          opened = false;
+        }
+      });
+
+      /* 🌹 Hoa hồng nền chuyển động */
+      const roseContainer = document.getElementById("roses");
+      const roseEmoji = "🌹";
+      for (let i = 0; i < 10; i++) {
+        const r = document.createElement("div");
+        r.classList.add("rose");
+        r.style.left = Math.random() * 100 + "%";
+        r.style.animationDelay = Math.random() * 10 + "s";
+        r.style.fontSize = 24 + Math.random() * 20 + "px";
+        r.textContent = roseEmoji;
+        roseContainer.appendChild(r);
+      }
+
+      /* 🎉 Confetti khi mở */
+      const canvas = document.getElementById("confetti");
+      const ctx = canvas.getContext("2d");
+      canvas.width = innerWidth;
+      canvas.height = innerHeight;
+
+      let confetti = [];
+
+      function random(min, max) {
+        return Math.random() * (max - min) + min;
+      }
+
+      function createConfetti() {
+        for (let i = 0; i < 60; i++) {
+          confetti.push({
+            x: random(0, canvas.width),
+            y: random(-canvas.height, 0),
+            r: random(3, 6),
+            color: `hsl(${random(320, 360)},70%,70%)`,
+            vy: random(1, 2.5),
+            vx: random(-0.8, 0.8),
+          });
+        }
+      }
+      function drawConfetti() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        confetti.forEach((p) => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+        });
+      }
+      function updateConfetti() {
+        confetti.forEach((p) => {
+          p.y += p.vy;
+          p.x += p.vx;
+          if (p.y > canvas.height) p.y = random(-20, 0);
+        });
+      }
+      function animate() {
+        drawConfetti();
+        updateConfetti();
+        requestAnimationFrame(animate);
+      }
+      function startConfetti() {
+        if (confetti.length === 0) createConfetti();
+        animate();
+      }
+      window.addEventListener("resize", () => {
+        canvas.width = innerWidth;
+        canvas.height = innerHeight;
+      });
+    </script>
+  </body>
+</html>
